@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blog.mapper.NotificationMapper">
+
+    <resultMap id="NotificationResultMap" type="Notification">
+        <id column="notification_id" property="notificationId"/>
+        <result column="uid" property="uid"/>
+        <result column="follow_uid" property="followUid"/>
+        <result column="content" property="content"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="selectByNotificationId" parameterType="Integer" resultMap="NotificationResultMap">
+        SELECT * FROM notification WHERE notification_id = #{notificationId}
+    </select>
+
+    <insert id="insert" parameterType="Notification" useGeneratedKeys="true" keyProperty="notificationId">
+        INSERT INTO notification (uid, follow_uid, content, status, create_time)
+        VALUES (#{uid}, #{followUid}, #{content}, #{status}, #{createTime})
+    </insert>
+
+    <update id="update" parameterType="Notification">
+        UPDATE notification
+        <set>
+            <if test="uid != null">uid = #{uid},</if>
+            <if test="followUid != null">follow_uid = #{followUid},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        WHERE notification_id = #{notificationId}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM notification WHERE notification_id = #{notificationId}
+    </delete>
+
+    <select id="selectByUid" parameterType="Integer" resultMap="NotificationResultMap">
+        SELECT * FROM notification WHERE uid = #{uid} ORDER BY create_time DESC
+    </select>
+
+    <select id="selectUnreadByUid" parameterType="Integer" resultMap="NotificationResultMap">
+        SELECT * FROM notification WHERE uid = #{uid} AND status = 0 ORDER BY create_time DESC
+    </select>
+
+    <update id="updateStatus" parameterType="Integer">
+        UPDATE notification SET status = 1 WHERE notification_id = #{notificationId}
+    </update>
+
+</mapper>
