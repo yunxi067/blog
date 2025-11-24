@@ -154,7 +154,64 @@ blog-system/
    - content: 通知内容
    - status: 状态（0=unread, 1=read）
 
-## 安装与配置
+## 快速开始
+
+### 一键启动（推荐）
+
+#### Linux / macOS
+```bash
+# 给启动脚本执行权限
+chmod +x start.sh
+
+# 一键启动（包含数据库初始化）
+./start.sh
+```
+
+#### Windows
+```cmd
+# 双击运行或在命令行执行
+start.bat
+```
+
+启动脚本会自动：
+- ✅ 检查 Java 和 Maven 环境
+- ✅ 创建文件上传目录
+- ✅ 初始化数据库和表结构
+- ✅ 创建默认管理员账户 (admin/admin123)
+- ✅ 编译并启动 Tomcat 服务器
+
+### 手动启动
+
+如果需要手动配置：
+
+1. **初始化数据库**
+   ```bash
+   # Linux/macOS
+   ./setup-db.sh
+   
+   # Windows
+   setup-db.bat
+   ```
+
+2. **启动应用**
+   ```bash
+   mvn clean package -DskipTests
+   mvn tomcat7:run
+   ```
+
+### 访问应用
+
+启动成功后访问：http://localhost:8080/blog-system
+
+**默认账户：**
+- 管理员：admin / admin123  
+- 普通用户：user1 / admin123
+
+> 💡 **提示**: 首次启动建议使用一键启动脚本，会自动处理所有配置。
+
+---
+
+## 安装与配置（传统方式）
 
 ### 前置条件
 - JDK 1.8+
@@ -216,13 +273,14 @@ http://localhost:8080/blog-system
 
 ## 默认账户
 
-- **管理员**
-  - 用户名: admin
-  - 密码: admin123
+系统会自动创建以下默认账户：
 
-- **普通用户**
-  - 用户名: user1
-  - 密码: user123
+| 用户名 | 密码 | 角色 | 说明 |
+|--------|------|------|------|
+| admin | admin123 | 管理员 | 系统管理员账户 |
+| user1 | admin123 | 普通用户 | 测试用户账户 |
+
+> ⚠️ **安全提醒**: 生产环境中请修改默认密码。
 
 ## API文档
 
