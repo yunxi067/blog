@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blog.mapper.FollowMapper">
+
+    <resultMap id="FollowResultMap" type="Follow">
+        <id column="follow_id" property="followId"/>
+        <result column="uid" property="uid"/>
+        <result column="follow_uid" property="followUid"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="selectByFollowId" parameterType="Integer" resultMap="FollowResultMap">
+        SELECT * FROM follow WHERE follow_id = #{followId}
+    </select>
+
+    <insert id="insert" parameterType="Follow" useGeneratedKeys="true" keyProperty="followId">
+        INSERT INTO follow (uid, follow_uid, create_time)
+        VALUES (#{uid}, #{followUid}, #{createTime})
+    </insert>
+
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM follow WHERE follow_id = #{followId}
+    </delete>
+
+    <delete id="deleteByUidAndFollowUid">
+        DELETE FROM follow WHERE uid = #{uid} AND follow_uid = #{followUid}
+    </delete>
+
+    <select id="selectByUid" parameterType="Integer" resultMap="FollowResultMap">
+        SELECT * FROM follow WHERE uid = #{uid} ORDER BY create_time DESC
+    </select>
+
+    <select id="selectFollowersByUid" parameterType="Integer" resultMap="FollowResultMap">
+        SELECT * FROM follow WHERE follow_uid = #{uid} ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByUidAndFollowUid" resultMap="FollowResultMap">
+        SELECT * FROM follow WHERE uid = #{uid} AND follow_uid = #{followUid}
+    </select>
+
+    <select id="countFollowersByUid" parameterType="Integer" resultType="int">
+        SELECT COUNT(*) FROM follow WHERE follow_uid = #{uid}
+    </select>
+
+    <select id="countFollowingByUid" parameterType="Integer" resultType="int">
+        SELECT COUNT(*) FROM follow WHERE uid = #{uid}
+    </select>
+
+</mapper>

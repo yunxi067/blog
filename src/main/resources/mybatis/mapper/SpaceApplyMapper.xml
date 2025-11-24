@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blog.mapper.SpaceApplyMapper">
+
+    <resultMap id="SpaceApplyResultMap" type="SpaceApply">
+        <id column="apply_id" property="applyId"/>
+        <result column="uid" property="uid"/>
+        <result column="apply_size" property="applySize"/>
+        <result column="status" property="status"/>
+        <result column="reason" property="reason"/>
+        <result column="reject_reason" property="rejectReason"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="approved_by" property="approvedBy"/>
+    </resultMap>
+
+    <select id="selectByApplyId" parameterType="Integer" resultMap="SpaceApplyResultMap">
+        SELECT * FROM space_apply WHERE apply_id = #{applyId}
+    </select>
+
+    <insert id="insert" parameterType="SpaceApply" useGeneratedKeys="true" keyProperty="applyId">
+        INSERT INTO space_apply (uid, apply_size, status, reason, create_time)
+        VALUES (#{uid}, #{applySize}, #{status}, #{reason}, #{createTime})
+    </insert>
+
+    <update id="update" parameterType="SpaceApply">
+        UPDATE space_apply
+        <set>
+            <if test="uid != null">uid = #{uid},</if>
+            <if test="applySize != null">apply_size = #{applySize},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="rejectReason != null">reject_reason = #{rejectReason},</if>
+            <if test="approvedBy != null">approved_by = #{approvedBy},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE apply_id = #{applyId}
+    </update>
+
+    <select id="selectByUid" parameterType="Integer" resultMap="SpaceApplyResultMap">
+        SELECT * FROM space_apply WHERE uid = #{uid} ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByStatus" parameterType="Integer" resultMap="SpaceApplyResultMap">
+        SELECT * FROM space_apply WHERE status = #{status} ORDER BY create_time DESC
+    </select>
+
+    <select id="selectAll" resultMap="SpaceApplyResultMap">
+        SELECT * FROM space_apply ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByStatusAndUid" resultMap="SpaceApplyResultMap">
+        SELECT * FROM space_apply WHERE status = #{status} AND uid = #{uid} ORDER BY create_time DESC
+    </select>
+
+</mapper>
